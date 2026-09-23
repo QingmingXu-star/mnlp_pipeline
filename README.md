@@ -93,7 +93,7 @@ python scripts/verify_run.py --dataset German.csv --run outputs/german-gpt2
 
 Basic tests run offline using a tiny random HF causal model as a fixture. The optional integration test uses the actual pinned German GPT-2. Original reference functions and their Apache license are in `vendor/eurogest/`; parity tests execute upstream bodies, not a second hand-written formula. Test fixtures are not presented as research data.
 
-See [REVIEW.md](docs/REVIEW.md) for a review checklist and [VALIDATION.md](docs/VALIDATION.md) for actual run evidence. The dataset copy is included as requested by the project owner; its Apache-2.0 notice is retained in `data/eurogest/LICENSE`. No messages or files have been sent to anyone automatically.
+See [REVIEW.md](docs/REVIEW.md) for a review checklist and [VALIDATION.md](docs/VALIDATION.md) for actual run evidence. The dataset copy is included as requested by the project owner; its Apache-2.0 notice is retained in `data/eurogest/LICENSE`. No credentials or local runtime caches are included.
 
 ## Layout
 
@@ -103,6 +103,6 @@ scripts/            single-model entry point and independent run audit
 tests/             offline tests and real-model parity
 vendor/eurogest/    unchanged upstream reference files and provenance
 docs/              methodological audit and review evidence
-German.csv          user-supplied official German data (not tracked)
+German.csv          user-supplied official German data (included for review)
 outputs/            separate run directories
 ```
