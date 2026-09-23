@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/JacquelineRowe/EuroGEST",
+  "commit": "b54359247d6a0cfab3247cc02be152e809004cbe",
+  "files": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "language_test_configs.json": "d64e47a726befe3f63a80adcfa058597e5d1961a025a600913e65462e883410f",
+    "main.py": "b7279811717761e5bd79947983875fade1862ac8fbfd80360525351033924d29",
+    "model_utils.py": "f9e7b6504d5524539984f7ba5ef29e3ae765ed2a96c5d5e133f51bece08c7159",
+    "prompt_scaffolds.json": "e6f22133fca8dd2266200774bb63777d94f4327ac1c55d43ce7a852a7102c238",
+    "prompts.py": "51340d4dd6c2ea3bd30b250a8b01599579d43dc29a7994c2cdf8ef7a9eaf81db",
+    "punc_map.json": "3bc2b99107a8113a03eb53355b9a3bd5061b7965a2f7c0038c19a168d09b3769",
+    "scoring.py": "57e691b228a2006242cc68d6fbd6d56d5728d5b7e8dd08a0829aa2701dea89f7",
+    "stereotype_labels.json": "793e01018d90e6b6ad5ada90d09b13eb513fbdc4654ae24b2141c3f635fbf62e"
+  }
+}

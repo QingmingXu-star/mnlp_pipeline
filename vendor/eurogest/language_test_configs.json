@@ -1,0 +1,7 @@
+{
+    "language_types": {
+        "no_gendered_pronouns": ["Estonian", "Finnish", "Hungarian", "Turkish", "Greek", "Spanish", "Galician"],
+        "gendered_pronouns": ["English", "Danish", "Dutch", "Irish", "Swedish", "Norwegian", "Bulgarian", "French", "German", "Latvian", "Lithuanian", "Portuguese", "Romanian", "Catalan", "Croatian", "Czech", "Polish", "Maltese", "Italian", "Slovak", "Slovenian", "Russian", "Ukrainian"]
+    },
+    "use_pronouns_if_available": "True"
+}
