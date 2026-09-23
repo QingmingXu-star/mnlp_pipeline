@@ -1,0 +1,12 @@
+{
+  "dataset_id": "utter-project/EuroGEST",
+  "dataset_revision": "a97bd293c32e85de950db7573e0b8be8b80e83cd",
+  "file": "German.csv",
+  "sha256": "d76cde823e9921e576b401aa3905c2f7f0bb548f177daabd99b29eb2526f8e66",
+  "n_samples": 2829,
+  "verification_method": "Local Git blob SHA-1 and byte size match the public HF tree entry at the pinned revision",
+  "git_blob_oid": "28a87fea6c625e1be0a78acbfad7de71cad3089c",
+  "byte_size": 401950,
+  "metadata_url": "https://huggingface.co/api/datasets/utter-project/EuroGEST/tree/a97bd293c32e85de950db7573e0b8be8b80e83cd",
+  "verified_at": "2026-09-23T15:55:39.278156+00:00"
+}

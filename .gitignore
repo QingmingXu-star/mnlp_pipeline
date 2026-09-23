@@ -1,0 +1,18 @@
+# Local runtime, model downloads, and generated Python files
+.venv/
+.hf_cache/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+.env
+.env.*
+
+# Source documents excluded at the project owner's request
+/1.pdf
+/2.pdf
+/Gender Bias Evaluation Pipeline — Research & Implementation Brief.md
+
+# Keep the reviewed reference run; ignore later local runs by default
+/outputs/*
+!/outputs/german-gpt2/
