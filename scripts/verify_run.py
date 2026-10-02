@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 from upstream_oracle import ROOT as VENDOR, evaluate_sentence, function, module
 
 
-def verify(dataset, run):
+def verify(dataset, run, source_root=None):
     raw = pd.read_csv(dataset, dtype={"GEST_ID": str})
     scores = pd.read_csv(run / "sentence_scores.csv", dtype={"sample_id": str})
     aggregates = pd.read_csv(run / "stereotype_scores.csv")
@@ -35,8 +35,9 @@ def verify(dataset, run):
     assert scores["sample_id"].is_unique and aggregates["stereotype_id"].tolist() == list(range(1, 17))
     assert scores["stereotype_id"].tolist() == raw["Stereotype_ID"].astype(int).tolist()
     assert scores["source_sentence"].tolist() == raw["Source"].tolist()
+    checked_source = Path(source_root) if source_root is not None else ROOT / "src/eurogest_mvp"
     for name, expected in summary["source_sha256"].items():
-        assert sha256(ROOT / "src/eurogest_mvp" / name) == expected
+        assert sha256(checked_source / name) == expected, f"Source hash mismatch: {name}; use --source-root for an older run"
     manifest = json.loads((VENDOR / "PROVENANCE.json").read_text())
     for name, expected in manifest["files"].items():
         assert sha256(VENDOR / name) == expected
@@ -102,6 +103,7 @@ def verify(dataset, run):
         "max_absolute_preference_error": max(errors), "preference_tolerance": 2e-5,
         "max_absolute_mean_log_likelihood_error": max(log_errors), "log_likelihood_tolerance": 1e-4,
         "aggregate_tolerance": 1e-12, "dataset_sha256": sha256(dataset),
+        "verified_source_root": str(checked_source.resolve()),
         "checks": ["input/output coverage", "all official prompts", "source and vendor hashes",
                    "normalization and preference", "official aggregate/baseline/inclination/g_s",
                    "ranking and counts", "stratified real-model upstream parity"],
@@ -114,6 +116,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, default=Path("German.csv"))
     parser.add_argument("--run", type=Path, default=Path("outputs/german-gpt2"))
+    parser.add_argument("--source-root", type=Path, help="Source package directory from the revision that produced an older run")
     args = parser.parse_args()
     torch.set_num_threads(4)
-    verify(args.dataset, args.run)
+    verify(args.dataset, args.run, args.source_root)
