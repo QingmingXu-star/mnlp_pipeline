@@ -10,3 +10,10 @@
 8. Treat this model run as pipeline validation. It provides no evidence of an adaptation or mitigation effect, because there is only one model and one language.
 
 No communication, sharing or publishing to colleagues is performed automatically. Share the source and permitted results yourself. The owner requested inclusion of the downloaded German dataset; its attribution and license are retained.
+
+## Modularization review
+
+- Read `MODULARIZATION.md` and inspect dependency direction: CLI/config → orchestration → backend, pure scoring, aggregation and export.
+- Inspect `tests/test_modularity.py`: a fake backend exercises orchestration without loading model weights; malformed provenance and occupied destinations fail before inference; write failures do not leave a partial run.
+- Compare `outputs/german-gpt2-modular/regression.json` and both CSV files against the original reference run. Inspect the new run's configuration and source hashes.
+- Audit the modular run using the README command. Historical runs require the source revision that produced them; do not disable fingerprint checks.
