@@ -16,3 +16,4 @@ __pycache__/
 # Keep the reviewed reference run; ignore later local runs by default
 /outputs/*
 !/outputs/german-gpt2/
+!/outputs/german-gpt2-modular/

@@ -56,7 +56,7 @@ python -m pip install --no-deps --no-build-isolation -e .
 export HF_HOME="$PWD/.hf_cache"
 ```
 
-`requirements-lock.txt` records the validated environment; `pyproject.toml` pins direct dependencies. The CLI intentionally fixes the model and its revision. This small German GPT-2 model is chosen for local validation; it provides no evidence about Llama/LeoLM or effects of language adaptation.
+`requirements-lock.txt` records the validated environment; `pyproject.toml` pins direct dependencies. The CLI defaults to the original pinned model. Model configuration is now separate from scoring; changing `--model` requires an explicit full `--model-revision` SHA. A separate `--tokenizer` also requires its own pinned revision. Only the default German model has been validated. This small German GPT-2 model is chosen for local validation; it provides no evidence about Llama/LeoLM or effects of language adaptation.
 
 Obtain `German.csv` from [the official EuroGEST dataset](https://huggingface.co/datasets/utter-project/EuroGEST) after accepting its access conditions. Save it in the project root. Alternatively, authenticate locally and use the pinned downloader:
 
@@ -88,12 +88,40 @@ python -m pytest -q
 # Adds comparison of the actual cached model with the original EuroGEST function:
 RUN_MODEL_TESTS=1 python -m pytest -q
 # Recompute aggregates and compare stratified real-data samples with upstream:
-python scripts/verify_run.py --dataset German.csv --run outputs/german-gpt2
+python scripts/verify_run.py --dataset German.csv --run outputs/german-gpt2-modular
 ```
 
 Basic tests run offline using a tiny random HF causal model as a fixture. The optional integration test uses the actual pinned German GPT-2. Original reference functions and their Apache license are in `vendor/eurogest/`; parity tests execute upstream bodies, not a second hand-written formula. Test fixtures are not presented as research data.
 
 See [REVIEW.md](docs/REVIEW.md) for a review checklist and [VALIDATION.md](docs/VALIDATION.md) for actual run evidence. The dataset copy is included as requested by the project owner; its Apache-2.0 notice is retained in `data/eurogest/LICENSE`. No credentials or local runtime caches are included.
+
+## Modular API (v0.2)
+
+See [the modularization plan and implementation notes](docs/MODULARIZATION.md) for module boundaries, extension points, compatibility and regression evidence. Existing CLI commands and CSV columns remain compatible.
+
+```python
+from pathlib import Path
+from eurogest_mvp.config import EvaluationConfig
+from eurogest_mvp.pipeline import run_evaluation
+
+result = run_evaluation(EvaluationConfig(
+    dataset=Path("German.csv"),
+    output=Path("outputs/my-api-run"),
+    device="cpu",
+    local_files_only=True,
+))
+print(result.summary["g_s_score"])
+```
+
+The new reference run is in `outputs/german-gpt2-modular/`; `regression.json` compares it with the unchanged original run in `outputs/german-gpt2/`. Run the audit against the modular directory when using this source revision. To audit the older run, supply its original source explicitly:
+
+```bash
+git worktree add --detach ../eurogest-original 42c7950349fc184c2851c15ce4071f5f64124f57
+python scripts/verify_run.py --dataset German.csv --run outputs/german-gpt2 \
+  --source-root ../eurogest-original/src/eurogest_mvp
+```
+
+`verify_run.py` deliberately checks code hashes and the default pinned model. It is a reference-run audit, not a generic validator for arbitrary replacement backends.
 
 ## Layout
 
