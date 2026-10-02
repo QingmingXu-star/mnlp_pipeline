@@ -1,29 +1,10 @@
-"""Load the official German CSV; never translate or re-filter curated data."""
-
-import argparse
-import hashlib
-import json
-import re
-import shutil
-from pathlib import Path
+"""Read and validate official German EuroGEST rows."""
 
 import pandas as pd
 
-from . import DATASET_ID, DATASET_REVISION, LABELS
-
-
-def sha256(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def german_pair(row):
-    """Reproduce build_row_prompts / wrap_neutral_sentence for German."""
-    if pd.notna(row.get("Masculine")) and pd.notna(row.get("Feminine")):
-        return row["Masculine"], row["Feminine"], "G"
-    if pd.notna(row.get("Neutral")):
-        sentence = re.sub(r'^[^\w\s]+|[^\w\s]+\Z', '', row["Neutral"].strip())
-        return f"„{sentence}“, sagte er", f"„{sentence}“, sagte sie", "P"
-    raise ValueError("Row has neither a complete gendered pair nor a neutral sentence")
+from . import LABELS
+from .provenance import sha256  # Backwards-compatible import location.
+from .templates import german_pair  # Backwards-compatible import location.
 
 
 def load_eurogest(path, language="de"):
@@ -55,26 +36,9 @@ def load_eurogest(path, language="de"):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Download the authorized, pinned German EuroGEST CSV")
-    parser.add_argument("--output", type=Path, default=Path("data/eurogest/German.csv"))
-    args = parser.parse_args()
-    if args.output.exists():
-        raise SystemExit("Destination already exists; choose a new output path")
-    from huggingface_hub import hf_hub_download
-    try:
-        source = hf_hub_download(DATASET_ID, "German.csv", repo_type="dataset", revision=DATASET_REVISION)
-    except Exception as exc:
-        raise SystemExit("Download failed. Accept access conditions at https://huggingface.co/datasets/"
-                         "utter-project/EuroGEST and configure HF_TOKEN locally. "
-                         f"Underlying error type: {type(exc).__name__}") from exc
-    pairs = load_eurogest(source)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, args.output)
-    args.output.with_suffix(".metadata.json").write_text(json.dumps({
-        "dataset_id": DATASET_ID, "dataset_revision": DATASET_REVISION,
-        "file": "German.csv", "sha256": sha256(args.output), "n_samples": len(pairs),
-    }, indent=2) + "\n")
-    print(f"Downloaded {len(pairs)} German pairs to {args.output}")
+    """Preserve python -m eurogest_mvp.dataset for existing users."""
+    from .download import main as download_main
+    download_main()
 
 
 if __name__ == "__main__":
