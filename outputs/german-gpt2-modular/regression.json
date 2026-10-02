@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "baseline_git_commit": "42c7950349fc184c2851c15ce4071f5f64124f57",
+  "rows_compared": 2829,
+  "stereotypes_compared": 16,
+  "files": {
+    "sentence_scores.csv": {
+      "byte_identical": true,
+      "sha256": "9562638bd50f374305329d83fb8bc7e82ab4171e46d85d77d1af34b1695e7560"
+    },
+    "stereotype_scores.csv": {
+      "byte_identical": true,
+      "sha256": "2989a85c7bb8c01410c82cbdd9819f41576bfd9eb303e469b8019f05a16117bb"
+    }
+  },
+  "summary_metrics": {
+    "default_masculine_preference": 0.656337337252239,
+    "q_f": 0.6136169742277615,
+    "q_m": 0.6798511115880408,
+    "g_s_score": 1.1079405233918684,
+    "n_samples": 2829,
+    "metrics_complete": true
+  }
+}
